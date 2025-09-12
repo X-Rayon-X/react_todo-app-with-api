@@ -19,7 +19,9 @@ export const TodoItem: React.FC<Props> = ({
   const [isEditing, setIsEditing] = useState(false);
   const [currentTitle, setCurrentTitle] = useState('');
 
-  function handleEdit() {
+  // eslint-disable-next-line max-len, prettier/prettier
+  function handleEdit(event: React.KeyboardEvent<HTMLInputElement> | React.FocusEvent<HTMLInputElement, Element>) {
+    event.preventDefault();
     if (currentTitle.trim() === '') {
       handleDelete(todo.id);
 
@@ -27,7 +29,7 @@ export const TodoItem: React.FC<Props> = ({
     }
 
     if (currentTitle !== todo.title) {
-      updateTodo({ ...todo, title: currentTitle, isLoading: false });
+      updateTodo({ ...todo, title: currentTitle.trim(), isLoading: false });
     }
 
     setIsEditing(false);
@@ -84,7 +86,7 @@ export const TodoItem: React.FC<Props> = ({
             onBlur={handleEdit}
             onKeyDown={e => {
               if (e.key === 'Enter') {
-                handleEdit();
+                handleEdit(e);
               }
 
               if (e.key === 'Escape') {

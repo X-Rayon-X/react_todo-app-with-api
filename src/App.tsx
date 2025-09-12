@@ -98,6 +98,9 @@ export const App: React.FC = () => {
             todo.id === updatedTodo.id ? todoSuccess : todo,
           ),
         );
+
+        // eslint-disable-next-line no-console
+        console.log(todoSuccess);
       })
       .catch(() => {
         setTodos(todos);
