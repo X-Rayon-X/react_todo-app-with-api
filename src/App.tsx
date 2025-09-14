@@ -75,17 +75,18 @@ export const App: React.FC = () => {
           ),
         );
       })
-      .catch(() => {
+      .catch(error => {
         setTodos(todos);
         setErrorMessage('Unable to add a todo');
         setIsHiddenErrorMessage(false);
+        throw error;
       });
   }
 
   function updateTodo(updatedTodo: Todo): Promise<void> {
     setTodos(currentTodos =>
       currentTodos.map(todo =>
-        todo.id === updatedTodo.id ? { ...updatedTodo, isLoading: true } : todo,
+        todo.id === updatedTodo.id ? { ...todo, isLoading: true } : todo,
       ),
     );
 
