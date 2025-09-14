@@ -102,9 +102,7 @@ export const App: React.FC = () => {
       .catch(error => {
         setTodos(currentTodos =>
           currentTodos.map(todo =>
-            todo.id === updatedTodo.id
-              ? { ...updatedTodo, isLoading: false }
-              : todo,
+            todo.id === updatedTodo.id ? { ...todo, isLoading: false } : todo,
           ),
         );
         setErrorMessage('Unable to update a todo');
