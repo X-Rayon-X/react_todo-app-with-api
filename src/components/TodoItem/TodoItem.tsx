@@ -5,14 +5,12 @@ import { Todo } from '../../types/Todo';
 
 export type Props = {
   todo: Todo;
-  setTodos: (value: Todo[] | ((prev: Todo[]) => Todo[])) => void;
   handleDelete: (todoId: number) => Promise<void>;
-  updateTodo: (updatedTodo: Todo) => void;
+  updateTodo: (updatedTodo: Todo) => Promise<void>;
 };
 
 export const TodoItem: React.FC<Props> = ({
   todo,
-  setTodos,
   handleDelete,
   updateTodo,
 }) => {
@@ -20,7 +18,8 @@ export const TodoItem: React.FC<Props> = ({
   const [currentTitle, setCurrentTitle] = useState('');
 
   // eslint-disable-next-line max-len, prettier/prettier
-  function handleEdit(event: React.KeyboardEvent<HTMLInputElement> | React.FocusEvent<HTMLInputElement, Element>) {
+  function handleEdit(event: React.KeyboardEvent<HTMLInputElement> | React.FocusEvent<HTMLInputElement, Element>,
+  ) {
     event.preventDefault();
     if (currentTitle.trim() === '') {
       handleDelete(todo.id);
@@ -29,10 +28,16 @@ export const TodoItem: React.FC<Props> = ({
     }
 
     if (currentTitle !== todo.title) {
-      updateTodo({ ...todo, title: currentTitle.trim(), isLoading: false });
+      updateTodo({
+        ...todo,
+        title: currentTitle.trim(),
+        isLoading: false,
+      })
+        .then(() => setIsEditing(false))
+        .catch(() => {});
+    } else {
+      setIsEditing(false);
     }
-
-    setIsEditing(false);
   }
 
   return (
@@ -52,11 +57,6 @@ export const TodoItem: React.FC<Props> = ({
               ...todo,
               completed: !todo.completed,
               isLoading: false,
-            });
-            setTodos((prev: Todo[]) => {
-              return prev.map(t =>
-                t.id === todo.id ? { ...t, completed: !t.completed } : t,
-              );
             });
           }}
         />

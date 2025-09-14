@@ -6,19 +6,21 @@ import { Filter } from '../../types/Filter';
 type Props = {
   filter: Filter;
   todos: Todo[];
-  setTodos: (value: Todo[] | ((prev: Todo[]) => Todo[])) => void;
   handleDelete: (todoId: number) => Promise<void>;
-  updateTodo: (updatedTodo: Todo) => void;
+  updateTodo: (updatedTodo: Todo) => Promise<void>;
 };
 
 export const TodoList: React.FC<Props> = ({
   filter,
   todos,
-  setTodos,
   handleDelete,
   updateTodo,
 }) => {
   const filteredTodos = todos.filter((todo: Todo) => {
+    if (todo.isLoading) {
+      return true;
+    }
+
     if (filter === 'active') {
       return !todo.completed;
     }
@@ -35,7 +37,6 @@ export const TodoList: React.FC<Props> = ({
     <TodoItem
       key={todo.id}
       todo={todo}
-      setTodos={setTodos}
       handleDelete={handleDelete}
       updateTodo={updateTodo}
     />

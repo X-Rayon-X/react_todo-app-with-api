@@ -8,16 +8,14 @@ type Props = {
   IsLoadLoader: boolean;
   filter: Filter;
   todos: Todo[];
-  setTodos: (value: Todo[] | ((prev: Todo[]) => Todo[])) => void;
   handleDelete: (todoId: number) => Promise<void>;
-  updateTodo: (updatedTodo: Todo) => void;
+  updateTodo: (updatedTodo: Todo) => Promise<void>;
 };
 
 export const Main: React.FC<Props> = ({
   IsLoadLoader,
   filter,
   todos,
-  setTodos,
   handleDelete,
   updateTodo,
 }) => {
@@ -26,7 +24,6 @@ export const Main: React.FC<Props> = ({
       <TodoList
         filter={filter}
         todos={todos}
-        setTodos={setTodos}
         handleDelete={handleDelete}
         updateTodo={updateTodo}
       />

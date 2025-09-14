@@ -75,22 +75,21 @@ export const App: React.FC = () => {
           ),
         );
       })
-      .catch(error => {
+      .catch(() => {
         setTodos(todos);
         setErrorMessage('Unable to add a todo');
         setIsHiddenErrorMessage(false);
-        throw error;
       });
   }
 
-  function updateTodo(updatedTodo: Todo) {
+  function updateTodo(updatedTodo: Todo): Promise<void> {
     setTodos(currentTodos =>
       currentTodos.map(todo =>
         todo.id === updatedTodo.id ? { ...updatedTodo, isLoading: true } : todo,
       ),
     );
 
-    todoService
+    return todoService
       .updateTodo(updatedTodo)
       .then(todoSuccess => {
         setTodos(currentTodos =>
@@ -98,14 +97,18 @@ export const App: React.FC = () => {
             todo.id === updatedTodo.id ? todoSuccess : todo,
           ),
         );
-
-        // eslint-disable-next-line no-console
-        console.log(todoSuccess);
       })
-      .catch(() => {
-        setTodos(todos);
+      .catch(error => {
+        setTodos(currentTodos =>
+          currentTodos.map(todo =>
+            todo.id === updatedTodo.id
+              ? { ...updatedTodo, isLoading: false }
+              : todo,
+          ),
+        );
         setErrorMessage('Unable to update a todo');
         setIsHiddenErrorMessage(false);
+        throw error;
       });
   }
 
@@ -173,7 +176,6 @@ export const App: React.FC = () => {
           IsLoadLoader={IsLoadLoader}
           filter={filter}
           todos={todos}
-          setTodos={setTodos}
           handleDelete={handleDelete}
           updateTodo={updateTodo}
         />
