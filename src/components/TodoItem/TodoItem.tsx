@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/indent */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import classNames from 'classnames';
 import React, { useState } from 'react';
@@ -17,8 +18,10 @@ export const TodoItem: React.FC<Props> = ({
   const [isEditing, setIsEditing] = useState(false);
   const [currentTitle, setCurrentTitle] = useState('');
 
-  // eslint-disable-next-line max-len, prettier/prettier
-  function handleEdit(event: React.KeyboardEvent<HTMLInputElement> | React.FocusEvent<HTMLInputElement, Element>,
+  function handleEdit(
+    event:
+      | React.KeyboardEvent<HTMLInputElement>
+      | React.FocusEvent<HTMLInputElement, Element>,
   ) {
     event.preventDefault();
     if (currentTitle.trim() === '') {
