@@ -28,8 +28,6 @@ export const Main: React.FC<Props> = ({
         updateTodo={updateTodo}
       />
 
-      {/* 'is-active' class puts this modal on top of the todo */}
-
       <div
         data-cy="TodoLoader"
         className={classNames('modal overlay', { 'is-active': IsLoadLoader })}

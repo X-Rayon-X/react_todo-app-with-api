@@ -9,6 +9,7 @@ import { Main } from './components/Main';
 import { Footer } from './components/Footer';
 import { ErrorNotifications } from './components/ErrorNotification';
 import { Filter } from './types/Filter';
+import { ErrorMessage } from './types/ErrorMessage';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -31,7 +32,7 @@ export const App: React.FC = () => {
         setIsHiddenErrorMessage(true);
       })
       .catch(() => {
-        setErrorMessage('Unable to load todos');
+        setErrorMessage(ErrorMessage.loadTodosError);
         setIsHiddenErrorMessage(false);
       })
       .finally(() => setIsLoadLoader(false));
@@ -46,7 +47,7 @@ export const App: React.FC = () => {
         ),
       )
       .catch(() => {
-        setErrorMessage('Unable to delete a todo');
+        setErrorMessage(ErrorMessage.deleteTodoError);
         setIsHiddenErrorMessage(false);
       });
   }
@@ -77,7 +78,7 @@ export const App: React.FC = () => {
       })
       .catch(error => {
         setTodos(todos);
-        setErrorMessage('Unable to add a todo');
+        setErrorMessage(ErrorMessage.addTodoError);
         setIsHiddenErrorMessage(false);
         throw error;
       });
@@ -105,7 +106,7 @@ export const App: React.FC = () => {
             todo.id === updatedTodo.id ? { ...todo, isLoading: false } : todo,
           ),
         );
-        setErrorMessage('Unable to update a todo');
+        setErrorMessage(ErrorMessage.updateTodoError);
         setIsHiddenErrorMessage(false);
         throw error;
       });

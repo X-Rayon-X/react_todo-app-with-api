@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Todo } from '../../types/Todo';
 import { USER_ID } from '../../api/todos';
 import classNames from 'classnames';
+import { ErrorMessage } from '../../types/ErrorMessage';
 
 type Props = {
   todos: Todo[];
@@ -31,6 +32,26 @@ export const Header: React.FC<Props> = ({
   const [title, setTitle] = useState('');
   const checkCompleted = todos.every(todo => todo.completed);
 
+  const handleToggleTodos = () => {
+    setTodos((prev: Todo[]) =>
+      prev.map(todo => {
+        if (todo.completed !== !checkCompleted) {
+          const updated = {
+            ...todo,
+            completed: !checkCompleted,
+            isLoading: false,
+          };
+
+          updateTodo(updated);
+
+          return updated;
+        }
+
+        return todo;
+      }),
+    );
+  };
+
   useEffect(() => {
     if (!isAddLoader) {
       inputRef.current?.focus();
@@ -40,7 +61,6 @@ export const Header: React.FC<Props> = ({
 
   return (
     <header className="todoapp__header">
-      {/* this button should have `active` class only if all todos are completed */}
       {!IsLoadLoader && todos.length !== 0 && (
         <button
           type="button"
@@ -48,29 +68,10 @@ export const Header: React.FC<Props> = ({
             active: checkCompleted,
           })}
           data-cy="ToggleAllButton"
-          onClick={() => {
-            setTodos((prev: Todo[]) => {
-              return prev.map(todo => {
-                if (todo.completed !== !checkCompleted) {
-                  const updated = {
-                    ...todo,
-                    completed: !checkCompleted,
-                    isLoading: false,
-                  };
-
-                  updateTodo(updated);
-
-                  return updated;
-                }
-
-                return todo;
-              });
-            });
-          }}
+          onClick={handleToggleTodos}
         />
       )}
 
-      {/* Add a todo on form submit */}
       <form
         onSubmit={(e: React.FormEvent) => {
           e.preventDefault();
@@ -89,7 +90,7 @@ export const Header: React.FC<Props> = ({
                 onAddLoader(false);
               });
           } else {
-            onError('Title should not be empty');
+            onError(ErrorMessage.emptyTitleError);
             onErrorHidden(false);
           }
         }}

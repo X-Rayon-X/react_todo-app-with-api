@@ -24,7 +24,7 @@ export const TodoItem: React.FC<Props> = ({
       | React.FocusEvent<HTMLInputElement, Element>,
   ) {
     event.preventDefault();
-    if (currentTitle.trim() === '') {
+    if (!currentTitle.trim()) {
       handleDelete(todo.id);
 
       return;
